@@ -86,7 +86,7 @@ export default new Router({
       children: [
         {
           path: '',
-          name: 'limitsAdmin',
+          // name: 'limitsAdmin',
           component(resolve) {
             require(['@/views/limits/admin'], resolve)
           },
@@ -131,6 +131,29 @@ export default new Router({
             require(['@/views/schedule/lead/index'],resolve)
           }
         },
+        // {
+        //   path: 'lead/:id',
+        //   name:'lead',
+        //   component(resolve) {
+        //     require(['@/views/schedule/lead/index'], resolve)
+        //   },
+        //   children:[
+        //     { 
+        //       path:'',
+        //       name:'leadList',
+        //       component(resolve) {
+        //         require(['@/views/schedule/lead/list'], resolve)
+        //       }
+        //     },
+        //     {
+        //       path: 'leadMonth',
+        //       name: 'leadMonth',
+        //       component(resolve) {
+        //         require(['@/views/schedule/lead/month'], resolve)
+        //       }
+        //     }
+        //   ]
+        // },
         {//领导行程--新建行程
           path: 'createSleadchedule',
           name: 'createSchedule',

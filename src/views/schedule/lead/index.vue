@@ -52,10 +52,17 @@
   position: relative;
   margin: 50px 0 100px 0;
 }
-.title-switch{
-  
+.title-switch {
+  background-color: #409eff;
+  margin-right: 50px;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 5px;
 }
-.el-icon-date{
+.title-switch-text {
+  margin-left: 5px;
+}
+.el-icon-date {
   font-size: 35px;
 }
 .title-today {
@@ -73,8 +80,8 @@
 
 /* table */
 .table {
-  margin:0 5% 50px 5%;
-  border:1px solid #000;
+  margin: 0 5% 50px 5%;
+  border: 1px solid #000;
 }
 .table-header,
 .table-footer {
@@ -84,12 +91,17 @@
   padding: 0 50px;
   background-color: #f0f0f0;
 }
-.table-footer{
+.table-footer {
   text-align: center;
 }
-
 .table-header-day {
   margin-right: 50px;
+}
+
+.main{
+  background:pink;
+  width:100%;
+  min-height:30vh;
 }
 </style>
 
@@ -105,13 +117,17 @@
     <!-- body -->
     <div class="item-body">
       <div class="item-body-btnGroup">
-        <el-button type="primary">创建行程</el-button>
+        <el-button @click="createSchedule" type="primary">创建行程</el-button>
         <el-button @click="filterSchedult" class="item-body-btn2" type="info">
           行程过滤
           <i class="el-icon-arrow-up" :class="{transform180:!filterShow}"></i>
         </el-button>
       </div>
-      <div v-show="filterShow" :class="{'item-body-btn2-active':!filterShow}" class="item-body-item">
+      <div
+        v-show="filterShow"
+        :class="{'item-body-btn2-active':!filterShow}"
+        class="item-body-item"
+      >
         <el-form ref="form" :model="form" class="flex flex-wrap" label-width="80px">
           <el-form-item label="领导名称">
             <el-select v-model="form.leader" placeholder="请选择领导名称">
@@ -171,10 +187,12 @@
       </div>
       <el-button class="title-today" type="primary">今天</el-button>
       <div class="title-right flex align-center">
-        <div class="title-switch flex align-center">
-          <i class="el-icon-date"></i>
-          <span>切换日历模式</span>  
-        </div>
+        <router-link :to="{path:'leadMonth'}">
+          <div class="title-switch hand flex align-center">
+            <i class="el-icon-date"></i>
+            <span class="flex title-switch-text">切换日历模式</span>
+          </div>
+        </router-link>
         <el-button-group>
           <el-button type="primary">日</el-button>
           <el-button type="primary">周</el-button>
@@ -183,75 +201,44 @@
       </div>
     </div>
 
+    <!-- main -->
+    <div class="main">
+       <router-view></router-view>
+    </div>
     <!-- table -->
-    <div v-for="(table,index) in tables" :key="index" class="table">
+    <!-- <div v-for="(table,index) in tables" :key="index" class="table">
       <div class="table-header">
-        <span class="table-header-day">2018年12月18日</span>
-        <span class="table-header-week">星期三</span>
+        <span class="table-header-day">{{table.date}}</span>
+        <span class="table-header-week">{{table.week}}</span>
       </div>
-      <el-table :data="tableData" border style="width: 100%">
-       <el-table-column align="center"
-          label="行程时间"
-          prop="time"
-          width="234">
-        </el-table-column>
-        <el-table-column align="center"
-          label="行程主题"
-          prop="theme"
-          width="234">
-        </el-table-column>
-        <el-table-column align="center"
-          label="主导领导"
-          prop="leader"
-          width="234">
-        </el-table-column>
-        <el-table-column align="center"
-          label="行程地点"
-          prop="addr"
-          width="234">
-        </el-table-column>
-        <el-table-column align="center"
-          label="负责人"
-          prop="principal"
-          width="234">
-        </el-table-column>
-        <!-- state -->
-        <el-table-column align="center"
-          label="审批状态"
-          prop="state"
-          width="234">
+      <el-table :data="table.tableData" border style="width: 100%">
+        <el-table-column align="center" label="行程时间" prop="time" width="234"></el-table-column>
+        <el-table-column align="center" label="行程主题" prop="theme" width="234"></el-table-column>
+        <el-table-column align="center" label="主导领导" prop="leader" width="234"></el-table-column>
+        <el-table-column align="center" label="行程地点" prop="addr" width="234"></el-table-column>
+        <el-table-column align="center" label="负责人" prop="principal" width="234"></el-table-column>
+        
+        <el-table-column align="center" label="审批状态" prop="state" width="234">
           <template slot-scope="scope">
-            <el-button type="danger" v-if="scope.row.state==='审核中'">审核中</el-button>
-            <el-button type="warning" v-else-if="scope.row.state==='待审核'">待审核</el-button>
+            <el-button type="danger" v-if="scope.row.state==='0'">审核中</el-button>
+            <el-button type="warning" v-else-if="scope.row.state==='1'">待审核</el-button>
             <el-button type="success" v-else>已通过</el-button>
           </template>
         </el-table-column>
-        <!-- oper -->
-        <el-table-column align="center"
-          label="操作"
-          prop="operation"
-          width="234">
+       
+        <el-table-column align="center" label="操作" prop="operation" width="234">
           <template slot-scope="scope">
             <el-button>{{scope.row.operation}}</el-button>
           </template>
         </el-table-column>
       </el-table>
       <div class="table-footer">
-        <!-- <span @click="createSchedule" class="hand">
+        <span @click="createSchedule" class="hand">
           <i class="el-icon-plus"></i>
           新建行程
-        </span> -->
-
-        <!-- <router-link   > -->
-          <span @click="createSchedule" class="hand">
-            <i class="el-icon-plus"></i>
-            新建行程
-          </span>
-        <!-- </router-link> -->
-        
-        
+        </span>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -263,27 +250,69 @@ export default {
   componentName: "comLead",
 
   props: {
-    show:{
-      type:Boolean,
-      default:true
+    show: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
     return {
       filterShow: false,
       value7: "",
-      tables:[
+      tables: [
         {
-          date:'2018年12月18日',
-          week:'星期二'
+          date: "2018年12月18日",
+          week: "星期二",
+          tableData: [
+            {
+              time: "10:00-10.30",
+              theme: "与中央电视台记者交流汽车",
+              leader: "李总、王总、总部各部门领导",
+              addr: "湖北省武汉市-集团总部",
+              principal: "李宗",
+              state: "0",
+              operation: "..."
+            },
+            {
+              time: "10:00-10.30",
+              theme: "与中央电视台记者交流汽车",
+              leader: "李总、王总、总部各部门领导",
+              addr: "湖北省武汉市-集团总部",
+              principal: "李宗",
+              state: "1",
+              operation: "..."
+            }
+          ]
         },
         {
-          date:'2018年12月19日',
-          week:'星期三'
+          date: "2018年12月19日",
+          week: "星期三",
+          tableData: [
+            {
+              time: "10:00-10.30",
+              theme: "与中央电视台记者交流汽车",
+              leader: "李总、王总、总部各部门领导",
+              addr: "湖北省武汉市-集团总部",
+              principal: "李宗",
+              state: "2",
+              operation: "..."
+            }
+          ]
         },
         {
-          date:'2018年12月20日',
-          week:'星期四'
+          date: "2018年12月20日",
+          week: "星期四",
+          tableData: [
+            {
+              time: "10:00-10.30",
+              theme: "与中央电视台记者交流汽车",
+              leader: "李总、王总、总部各部门领导",
+              addr: "湖北省武汉市-集团总部",
+              principal: "李宗",
+              state: "0",
+              operation: "..."
+            }
+          ]
         }
       ],
       form: {
@@ -292,38 +321,17 @@ export default {
         schedule: "",
         region: "",
         keyword: ""
-      },
-      tableData: [
-        {
-          time: "10:00-10.30",
-          theme: "与中央电视台记者交流汽车",
-          leader: "李总、王总、总部各部门领导",
-          addr:'湖北省武汉市-集团总部',
-          principal:'李宗',
-          state:'已通过',
-          operation:'...'
-        },
-        {
-          time: "10:00-10.30",
-          theme: "与中央电视台记者交流汽车",
-          leader: "李总、王总、总部各部门领导",
-          addr:'湖北省武汉市-集团总部',
-            principal:'李宗',
-            state:'审核中',
-            operation:'...'
-        },
-     
-      ]
+      }
     };
   },
   methods: {
-    createSchedule(){
+    createSchedule() {
       // :to="{name:'createSchedule'}"
       this.$router.push({
-        name:"createSchedule"
-      })
-      document.body.scrollTop = 0
-      document.documentElement.scrollTop = 0
+        name: "createSchedule"
+      });
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
     },
     filterSchedult() {
       this.filterShow = !this.filterShow;
