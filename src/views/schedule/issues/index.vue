@@ -2,7 +2,7 @@
 <style scoped>
 /* add */
 
-.top{
+.top {
   margin: 20px;
 }
 .top .top_title {
@@ -50,7 +50,7 @@ div.active {
   color: #000000;
 }
 /* 创建议题 */
-.upload-demo button::before {
+.updata::before {
   content: url(../../../assets/issues_clip.png);
   vertical-align: middle;
 }
@@ -76,18 +76,28 @@ div.active {
   margin-right: 20%;
 }
 /* 右侧锚点点击 */
-.anchor{
-  position:fixed;
-  top:370px;
+.anchor {
+  position: fixed;
+  top: 0px;
   right: 30px;
 }
-.anchor ul li{
+.anchor ul li {
   height: 60px;
   width: 125px;
-  border:1px solid #E4E4E4;
+  border: 1px solid #e4e4e4;
   line-height: 60px;
   text-align: center;
-  background: #F2F2F2;
+  background: #f2f2f2;
+}
+.anchor .anchor-li.active {
+  background: #18598c;
+  border: #18598c;
+  color: #ffffff;
+}
+/* 上传文件 */
+.updata{
+  border:0px solid #ffffff;
+  background: #ffffff;
 }
 </style>
 
@@ -107,14 +117,12 @@ div.active {
     <div class="flex-text-start">
       <div class="top-down pointer" :class="{active:tab == 1}" @click="tab = 1">创建议题</div>
       <!-- 议题过滤 -->
-      <div
-        class="top-down pointer"
-        :class="{active:tab == 2}"
-        @click="tab = 2;pullchange(pull)"
-      >
+      <div class="top-down pointer" :class="{active:tab == 2}" @click="tab = 2;pullchange(pull)">
         议题过滤
         <img :src="pull?img.img1:img.img2" alt class="imgmiddle">
       </div>
+      <!-- 创建领导行程 -->
+      <router-link class="top-down pointer" to v-show="route">创建领导行程</router-link>
     </div>
     <div v-show="tab==2">
       <div class="top-fil flex-text-start" v-show="pull">
@@ -161,7 +169,7 @@ div.active {
         </div>
       </div>
       <!-- 议题详情 -->
-        <hr>
+      <hr>
       <div>
         <el-table
           :data="tableData"
@@ -256,7 +264,7 @@ div.active {
       <div class="flex">
         <div class="create">
           <!-- 基本信息 -->
-          <div class="margin">
+          <div class="margin" id="am">
             <img src="../../../assets/issues_longshtring.jpg" alt class="imgmiddle">
             基本信息
           </div>
@@ -274,17 +282,25 @@ div.active {
               <el-form-item label="议题名称">
                 <el-input v-model="basic.name" placeholder="添加议题名称"></el-input>
               </el-form-item>
-              <!-- 汇报材料 -->
+              <!-- 汇报材料上传 -->
               <el-form-item label="汇报材料">
-                <el-upload
+                <!-- <el-upload
                   class="upload-demo"
                   action="https://jsonplaceholder.typicode.com/posts/"
-                  :on-change="handleChange"
-                  :file-list="basic.fileList3"
+                  :on-preview="handlePreview"
+                  :on-remove="handleRemove"
+                  :before-remove="beforeRemove"
+                  multiple
+                  :limit="3"
+                  :on-exceed="handleExceed"
+                  :file-list="basic.fileList"
                 >
-                  <el-button size="small" type="primary">上传附件</el-button>
-                  <div slot="tip" class="el-upload__tip">单个附件最大支持100M</div>
-                </el-upload>
+                  <el-button size="small">点击上传</el-button> -->
+                  <input class="updata" type="file" style="width:200px;"/>
+                  <span class="el-upload__tip">单个附件最大支持100M</span>
+                  <div class=""></div>
+                <!-- </el-upload> -->
+
               </el-form-item>
               <!-- 议题备注 -->
               <el-form-item label="议题备注">
@@ -293,7 +309,7 @@ div.active {
             </el-form>
           </div>
           <!-- 职能部门意见 -->
-          <div class="margin">
+          <div class="margin" id="bm">
             <img src="../../../assets/issues_longshtring.jpg" alt class="imgmiddle">
             职能部门意见
           </div>
@@ -302,8 +318,8 @@ div.active {
               <div class="flex-text-between padding-8px">
                 <p>{{item.title}}</p>
                 <div class>
-                  <el-button size="small" icon="el-icon-edit">编辑</el-button>
-                  <el-button size="small" icon="el-icon-remove">删除</el-button>
+                  <el-button type="text" size="small" icon="el-icon-edit">编辑</el-button>
+                  <el-button type="text" size="small" icon="el-icon-remove">删除</el-button>
                 </div>
               </div>
               <div class="padding-8px">
@@ -318,7 +334,7 @@ div.active {
           </div>
           <hr>
           <!-- 添加领导意见 -->
-          <div class="margin">
+          <div class="margin" id="cm">
             <img src="../../../assets/issues_longshtring.jpg" alt class="imgmiddle">
             添加领导意见
           </div>
@@ -326,8 +342,17 @@ div.active {
             <div>
               <el-form ref="leader" :model="leader" label-width="80px">
                 <el-form-item label="选择领导">
-                  <el-input v-model="leader.name" placeholder="选择领导" class="sel"></el-input>
-                  <el-input v-model="leader.idea" placeholder="领导的意见导入" class="sel"></el-input>
+                  <template>
+                    <el-select v-model="leader.value" placeholder="选择领导" style="width:100%">
+                      <el-option
+                        v-for="item in leader.options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      ></el-option>
+                    </el-select>
+                  </template>
+                  <el-input v-model="leader.idea" placeholder="领导的意见导入" class="margin"></el-input>
                 </el-form-item>
               </el-form>
             </div>
@@ -348,15 +373,18 @@ div.active {
           </div>
         </div>
         <!-- 右侧锚点点击 -->
-        <div class="anchor" @click="anchor($event)">
-          <ul class="none pointer">
-            <li>基本信息</li>
-            <li>职能部门意见</li>
-            <li>领导意见</li>
-            <li>
-              <img src="../../../assets/issues_uparrows.png" alt="">
-              回到顶部
-              </li>
+        <div class="anchor">
+          <ul class="ulnone pointer">
+            <li
+              v-for="(item,i) in anchordata"
+              :key="i"
+              @click="anchor(i)"
+              class="anchor-li"
+              :class="i==anchorindex?'active':' '"
+            >
+              <img :src="item.img" alt>
+              {{item.title}}
+            </li>
           </ul>
         </div>
       </div>
@@ -433,7 +461,7 @@ export default {
       // 议题详情数据
       checkBoxData: [], //多选框选择的值
       // 备注:状态数字 1:草稿;2:待审核;3:已审核;4:关闭;
-      //      审批状态:1:提交审批;2:查阅审批;3:已审核
+      // 审批状态:1:提交审批;2:查阅审批;3:已审核
       tableData: [
         {
           name: "mocus立项事宜议题",
@@ -485,14 +513,14 @@ export default {
         report: undefined,
         remark: undefined,
         radio: undefined,
-        fileList3: [
+        fileList: [
           {
-            name: "food.jpeg",
+            name: "food.doc",
             url:
               "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
           },
           {
-            name: "food2.jpeg",
+            name: "food2.excel",
             url:
               "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
           }
@@ -514,10 +542,44 @@ export default {
       // 领导意见
       leader: {
         name: undefined,
-        idea: undefined
+        idea: undefined,
+        options: [
+          {
+            value: "选项1",
+            label: "黄金糕"
+          },
+          {
+            value: "选项2",
+            label: "双皮奶"
+          },
+          {
+            value: "选项3",
+            label: "蚵仔煎"
+          },
+          {
+            value: "选项4",
+            label: "龙须面"
+          },
+          {
+            value: "选项5",
+            label: "北京烤鸭"
+          }
+        ],
+        value: ""
       },
       //锚点数据
-      anchor:[]
+      anchordata: [
+        { title: "基本信息" },
+        { title: "职能部门意见" },
+        { title: "领导意见" },
+        {
+          title: "回到顶部",
+          img: require("../../../assets/issues_uparrows.png")
+        }
+      ],
+      anchorindex: 0,
+      //创建行程
+      route: true
     };
   },
   methods: {
@@ -543,18 +605,36 @@ export default {
       console.log(this.pull);
     },
     // 上传文件
-    handleChange(file, fileList) {
-      this.fileList3 = fileList.slice(-3);
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    handlePreview(file) {
+      console.log(file);
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(
+        `当前限制选择 3 个文件，本次选择了 ${
+          files.length
+        } 个文件，共选择了 ${files.length + fileList.length} 个文件`
+      );
+    },
+    beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`);
     },
     //锚点点击事件
-    anchor(e){
-              var e = e || window.event;
-              var target = e.target || e.srcElement;
-              console.log(target);
-              if(target.nodeName.toLowerCase() === 'li'){
-                alert();
-              }
-            }
+    anchor(index) {
+      this.anchorindex = index;
+      if (index == 0) {
+        document.getElementById("am").scrollIntoView();
+      } else if (index == 1) {
+        document.getElementById("bm").scrollIntoView();
+      } else if (index == 2) {
+        document.getElementById("cm").scrollIntoView();
+      } else {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+      }
+    }
   }
 };
 </script>

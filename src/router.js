@@ -80,29 +80,31 @@ export default new Router({
     // 权限管理
     {
       path: '/limits/:id',
+      name:'index',
       component(resolve) {
-        require(['@/views/limits/index'], resolve)
+        require(['./views/limits/index'], resolve)
       },
       children: [
         {
           path: '',
-          // name: 'limitsAdmin',
+          name: 'limitsAdmin',
+          redirect:{name:'authority'},
           component(resolve) {
-            require(['@/views/limits/admin'], resolve)
+            require(['./views/limits/admin'], resolve)
           },
           children:[
             // 超级管理员
-            // {
-            //   path:'',
-            //   name:'limitsSuper',
-            //   component(resolve){
-            //     require(['./views/limits/super'],resolve)
-            //   }
-            // },
-            //编辑管理组
             {
               path:'',
-              name:'authority',
+              name:'limitsSuper',
+              component(resolve){
+                require(['./views/limits/super'],resolve)
+              }
+            },
+            // 编辑管理组
+            {
+              path:'',
+              name:'authority', 
               component(resolve){
                 require(['./views/limits/authority'],resolve)
               }

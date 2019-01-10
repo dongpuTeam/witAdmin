@@ -1,9 +1,13 @@
 /* 表单按键公共样式 */
-button.el-button{
+* {
+  color: #000000;
+  font-size: 12px !important;
+}
+.el-button{
     margin:0px;
     margin-right: 8px;
 }
-img.permissions_details_img {
+.permissions_details_img {
     height: 20px;
     vertical-align: middle;
 }
@@ -12,7 +16,6 @@ img.permissions_details_img {
 }
 .pointer{
     cursor: pointer;
-    color:#18598C;
 }
 /* 通用蓝色按钮 */
 .primary{
@@ -20,12 +23,27 @@ img.permissions_details_img {
     color: #FFFFFF;
     border-radius: 0px;
 }
-/* *{
-    color: #000000;
-    font-size: 12px !important;
+/* 通用container */
+  .margin{
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+  /* 宽度80% */
+  .width{
+    width: 80%;
+  }
+hr{
+  margin-top:15px;
+  margin-bottom: 15px;
 }
-.el-input__inner{
-    color: #000000;
-    font-size: 12px !important; 
-} */
-
+.ulnone{
+  list-style: none;
+  padding: 0px;
+}
+.padding-8px{
+  padding: 8px;
+}
+/* img的middle */
+.imgmiddle{
+  vertical-align: middle;
+}
