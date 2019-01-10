@@ -36,8 +36,8 @@
         <h1>前端部门</h1>
         <div class="navbox">
             <div class="tabs">
-                <div :class="{active:tab == 1}" @click="tab = 1">添加人员</div>
-                <div :class="{active:tab == 2}" @click="tab = 2">过滤人员</div>
+                <div :class="{active:tab == 1}" @click="managetab1">添加人员</div>
+                <div :class="{active:tab == 2}" @click="managetab2">过滤人员<i class='el-icon-arrow-up' :class="{transform180:!filterShow}"></i></div>
             </div>
             <el-dropdown>
                 <el-button type="primary" class="deal">批量处理<i class="el-icon-arrow-down el-icon--right"></i></el-button>
@@ -102,7 +102,7 @@
             </div>
             <!-- 过滤人员 -->
             <div v-show="tab==2">
-                <div class="filterbox">
+                <div class="filterbox" v-show="filterShow">
                     <el-form :model="filtForm" :rules="filter" ref="filtForm" label-width="150px" class="demo-ruleForm filterform">
                         <el-form-item label="真实姓名" prop="realname">
                             <el-input v-model="filtForm.realname"></el-input>
@@ -221,6 +221,7 @@ export default {
         }
     }; 
     return {
+        filterShow: false,
         data6: [{
           id: 1,
           label: '集团总部',
@@ -378,6 +379,14 @@ export default {
           }
         });
       },
+      //导航切换
+      managetab1:function(){
+          this.tab=1;
+      },
+      managetab2:function(){
+          this.tab=2;
+          this.filterShow=!this.filterShow;
+      },
       //登录
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
@@ -506,6 +515,9 @@ export default {
       border-radius: 2px;
       background: #18598c;
   }
+.transform180 {
+      transform: rotate(180deg);
+}
   .tabs div.active{
       background: #e4e4e4;
       color: #000000;
