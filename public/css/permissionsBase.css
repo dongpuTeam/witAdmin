@@ -1,0 +1,31 @@
+/* 表单按键公共样式 */
+button.el-button{
+    margin:0px;
+    margin-right: 8px;
+}
+img.permissions_details_img {
+    height: 20px;
+    vertical-align: middle;
+}
+.border-radius{
+    border-radius: 0px;
+}
+.pointer{
+    cursor: pointer;
+    color:#18598C;
+}
+/* 通用蓝色按钮 */
+.primary{
+    background: #18598C;
+    color: #FFFFFF;
+    border-radius: 0px;
+}
+/* *{
+    color: #000000;
+    font-size: 12px !important;
+}
+.el-input__inner{
+    color: #000000;
+    font-size: 12px !important; 
+} */
+
