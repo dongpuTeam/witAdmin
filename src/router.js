@@ -89,7 +89,25 @@ export default new Router({
           name: 'limitsAdmin',
           component(resolve) {
             require(['@/views/limits/admin'], resolve)
-          }
+          },
+          children:[
+            // 超级管理员
+            // {
+            //   path:'',
+            //   name:'limitsSuper',
+            //   component(resolve){
+            //     require(['./views/limits/super'],resolve)
+            //   }
+            // },
+            //编辑管理组
+            {
+              path:'',
+              name:'authority',
+              component(resolve){
+                require(['./views/limits/authority'],resolve)
+              }
+            }
+          ]
         }
       ]
     },
